@@ -1,11 +1,11 @@
 <template>
   <div class="weather">
-    <form @submit.prevent="() => fetchWeatherData(cityInputValue)">
+    <form @submit.prevent="requestWeatherData">
       <input-ui v-model="cityInputValue" :placeholder-text="cityInputPlaceholder" />
     </form>
 
     <img
-      :src="`src/assets/icons/weather/${description.toLowerCase()}.png`"
+      :src="`src/assets/icons/weather/${description}.png`"
       alt="Weather image"
       class="weather__image"
     />
@@ -24,25 +24,41 @@
     </text-with-icon>
 
     <text-with-icon img-src="/src/assets/icons/calendar.svg" class="date">
-      {{ new Date().toDateString() }}
+      {{ currentDate }}
     </text-with-icon>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, onMounted, ref, type ComputedRef } from 'vue'
 import InputUi from '@/components/UI/InputUi.vue'
 import TextWithIcon from '@/components/UI/TextWithIconUi.vue'
-import { useWeatherData } from '@/hooks/useWeatherData'
+import { useStore } from 'vuex'
 
 const cityInputValue = ref('')
 const cityInputPlaceholder = 'Enter your city'
-const { temperature, city, country, description, fetchWeatherData } = useWeatherData()
+const store = useStore()
+
+const currentDate: string = new Date().toDateString()
+const city: ComputedRef<string> = computed(() => store.getters.getCity)
+const temperature: ComputedRef<number> = computed(() => store.getters.getTemperature)
+const country: ComputedRef<string> = computed(() => store.getters.getCountry)
+const description: ComputedRef<string> = computed(() => store.getters.getDescription)
+
+const requestWeatherData = (): void => {
+  store.dispatch('fetchWeatherData', cityInputValue.value)
+  cityInputValue.value = ''
+}
+
+onMounted(() => {
+  store.dispatch('fetchWeatherData')
+})
 </script>
 
 <style lang="sass">
 .weather
 	width: 100%
+	height: 100%
 	border-radius: 25px
 	padding: 16px
 	background-image: var(--gradient)

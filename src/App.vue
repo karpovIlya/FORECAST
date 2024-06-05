@@ -1,10 +1,7 @@
 <template>
-  <weather-summary />
+  <common-weather-info />
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import WeatherSummary from '@/components/widgets/WeatherSummary.vue'
-
-const inputValue = ref('asd')
+import CommonWeatherInfo from '@/components/widgets/CommonWeatherInfo.vue'
 </script>
