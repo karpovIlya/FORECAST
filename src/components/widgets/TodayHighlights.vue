@@ -3,7 +3,7 @@
     <h2 class="highlight__title">Today's Highlights</h2>
 
     <div class="highlight__grid">
-      <small-info-block img-src="src/assets/icons/wind.png" title="wind">
+      <small-info-block :img-src="windSource.imgSrc" :title="windSource.title">
         <div class="wind">
           <div class="wind__speed">
             <span class="wind__value">{{ windInfo.speed }}</span> m/s
@@ -14,7 +14,7 @@
         </div>
       </small-info-block>
 
-      <small-info-block img-src="src/assets/icons/sun-moving.png" title="Sunrise and sunset">
+      <small-info-block :img-src="sunSource.imgSrc" :title="sunSource.title">
         <div class="sun">
           <div>
             <div class="sun__title">Sunrise</div>
@@ -28,7 +28,7 @@
         </div>
       </small-info-block>
 
-      <small-info-block img-src="src/assets/icons/barometer.png" title="Pressure">
+      <small-info-block :img-src="pressureSource.imgSrc" :title="pressureSource.title">
         <div class="pressure">
           <span class="pressure__value">{{ pressure }}</span> m/s
         </div>
@@ -43,11 +43,29 @@ import { useStore } from 'vuex'
 import { type IWind } from '@/types/WeatherDataType'
 import SmallInfoBlock from '@/components/widgets/SmallInfoBlock.vue'
 
+interface ISource {
+  title: string
+  imgSrc: string
+}
+
 const store = useStore()
 const windInfo: ComputedRef<IWind> = computed(() => store.getters.getWindInfo)
 const sunrise: ComputedRef<Date> = computed(() => store.getters.getSunrise)
 const sunset: ComputedRef<Date> = computed(() => store.getters.getSunset)
 const pressure: ComputedRef<number> = computed(() => store.getters.getPressure)
+
+const windSource: ISource = {
+  title: 'Wind',
+  imgSrc: 'src/assets/icons/wind.png'
+}
+const sunSource: ISource = {
+  title: 'Sunrise and sunset',
+  imgSrc: 'src/assets/icons/sun-moving.png'
+}
+const pressureSource: ISource = {
+  title: 'Pressure',
+  imgSrc: 'src/assets/icons/barometer.png'
+}
 </script>
 
 <style lang="sass">
