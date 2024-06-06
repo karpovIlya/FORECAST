@@ -1,12 +1,16 @@
-import { API_KEY, BASE_URL, ZERO_KELVIN } from '@/constants/index'
+import { API_KEY, BASE_URL, ZERO_KELVIN, MS_IN_SECOND } from '@/constants/index'
 import axios, { type AxiosResponse } from 'axios'
-import { type IWeatherResponse } from '@/types/WeatherDataType'
+import { type IWeatherResponse, type IWind } from '@/types/WeatherDataType'
 
 interface IWeatherDataState {
   city: string
   temperature: number
   country: string
   description: string
+  pressure: number
+  wind: IWind
+  sunrise: Date
+  sunset: Date
 }
 
 interface IContext {
@@ -19,7 +23,14 @@ export const weatherDataModule = {
     city: localStorage.getItem('city') ?? 'New York',
     temperature: 0,
     country: 'USA',
-    description: 'few clouds'
+    description: 'few clouds',
+    pressure: 0,
+    wind: {
+      speed: 0,
+      deg: 0
+    },
+    sunrise: new Date(),
+    sunset: new Date()
   }),
   getters: {
     getCity(state: IWeatherDataState) {
@@ -33,6 +44,18 @@ export const weatherDataModule = {
     },
     getDescription(state: IWeatherDataState) {
       return state.description
+    },
+    getPressure(state: IWeatherDataState) {
+      return state.pressure
+    },
+    getWindInfo(state: IWeatherDataState) {
+      return state.wind
+    },
+    getSunrise(state: IWeatherDataState) {
+      return state.sunrise
+    },
+    getSunset(state: IWeatherDataState) {
+      return state.sunset
     }
   },
   mutations: {
@@ -48,6 +71,18 @@ export const weatherDataModule = {
     },
     setDescription(state: IWeatherDataState, payload: string) {
       state.description = payload
+    },
+    setPressure(state: IWeatherDataState, payload: number) {
+      state.pressure = payload
+    },
+    setWind(state: IWeatherDataState, payload: IWind) {
+      state.wind = payload
+    },
+    setSunrise(state: IWeatherDataState, payload: Date) {
+      state.sunrise = payload
+    },
+    setSunset(state: IWeatherDataState, payload: Date) {
+      state.sunset = payload
     }
   },
   actions: {
@@ -67,6 +102,10 @@ export const weatherDataModule = {
           commit('setCountry', data.sys.country)
           commit('switchCity', data.name)
           commit('setDescription', data.weather[0].description)
+          commit('setPressure', data.main.pressure)
+          commit('setWind', data.wind)
+          commit('setSunrise', new Date(data.sys.sunrise * MS_IN_SECOND))
+          commit('setSunset', new Date(data.sys.sunset * MS_IN_SECOND))
         }
       } catch (_) {
         alert('You entered wrong answer!')

@@ -19,11 +19,6 @@ interface IMain {
   humidity: number
 }
 
-interface IWind {
-  speed: number
-  deg: number
-}
-
 interface IClouds {
   all: number
 }
@@ -34,6 +29,11 @@ interface ISys {
   sunrise: number
   sunset: number
   type: number
+}
+
+export interface IWind {
+  speed: number
+  deg: number
 }
 
 export interface IWeatherResponse {
