@@ -1,0 +1,10 @@
+@mixin adaptive($breakpoint)
+	@if $breakpoint == lg
+		@media (max-width: 1250px)
+			@content
+	@if $breakpoint == md
+		@media (max-width: 910px)
+			@content
+	@if $breakpoint == sm
+		@media (max-width: 600px)
+			@content

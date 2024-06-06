@@ -4,36 +4,35 @@
       <input-ui v-model="cityInputValue" :placeholder-text="cityInputPlaceholder" />
     </form>
 
-    <img
-      :src="`src/assets/icons/weather/${description}.png`"
-      alt="Weather image"
-      class="weather__image"
-    />
+    <img :src="weatherImage" alt="Weather image" class="weather__image" />
 
     <div class="temp">
       <div class="temp__main">{{ temperature }} °C</div>
-      <text-with-icon img-src="/src/assets/icons/weather.svg" class="temp__descr">
+      <text-with-icon :img-src="weatherIcon" class="temp__descr">
         {{ description }}
       </text-with-icon>
     </div>
 
     <div class="line"></div>
 
-    <text-with-icon img-src="/src/assets/icons/location.svg" class="city">
+    <text-with-icon :img-src="locationIcon" class="city">
       {{ city }}, {{ country }}
     </text-with-icon>
 
-    <text-with-icon img-src="/src/assets/icons/calendar.svg" class="date">
+    <text-with-icon :img-src="dateIcon" class="date">
       {{ currentDate }}
     </text-with-icon>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, type ComputedRef } from 'vue'
+import { computed, onMounted, ref, type ComputedRef, watch } from 'vue'
 import InputUi from '@/components/UI/InputUi.vue'
 import TextWithIcon from '@/components/UI/TextWithIconUi.vue'
 import { useStore } from 'vuex'
+import weatherIcon from '@/assets/icons/weather.svg'
+import locationIcon from '@/assets/icons/location.svg'
+import dateIcon from '@/assets/icons/calendar.svg'
 
 const cityInputValue = ref('')
 const cityInputPlaceholder = 'Enter your city'
@@ -44,6 +43,21 @@ const city: ComputedRef<string> = computed(() => store.getters.getCity)
 const temperature: ComputedRef<number> = computed(() => store.getters.getTemperature)
 const country: ComputedRef<string> = computed(() => store.getters.getCountry)
 const description: ComputedRef<string> = computed(() => store.getters.getDescription)
+
+const weatherImage = ref('')
+
+watch(
+  description,
+  async (newDescription) => {
+    try {
+      const image = await import(`@/assets/icons/weather/${newDescription}.png`)
+      weatherImage.value = image.default
+    } catch (_) {
+      weatherImage.value = (await import(`@/assets/icons/weather/clear sky.png`)).default
+    }
+  },
+  { immediate: true }
+)
 
 const requestWeatherData = (): void => {
   store.dispatch('fetchWeatherData', cityInputValue.value)

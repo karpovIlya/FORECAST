@@ -42,6 +42,9 @@ import { computed, type ComputedRef } from 'vue'
 import { useStore } from 'vuex'
 import { type IWind } from '@/types/WeatherDataType'
 import SmallInfoBlock from '@/components/widgets/SmallInfoBlock.vue'
+import barometerImage from '@/assets/icons/barometer.png'
+import sunImage from '@/assets/icons/sun-moving.png'
+import windImage from '@/assets/icons/wind.png'
 
 interface ISource {
   title: string
@@ -56,31 +59,36 @@ const pressure: ComputedRef<number> = computed(() => store.getters.getPressure)
 
 const windSource: ISource = {
   title: 'Wind',
-  imgSrc: 'src/assets/icons/wind.png'
+  imgSrc: windImage
 }
 const sunSource: ISource = {
   title: 'Sunrise and sunset',
-  imgSrc: 'src/assets/icons/sun-moving.png'
+  imgSrc: sunImage
 }
 const pressureSource: ISource = {
   title: 'Pressure',
-  imgSrc: 'src/assets/icons/barometer.png'
+  imgSrc: barometerImage
 }
 </script>
 
 <style lang="sass">
+@use 'src/assets/styles/mixin.sass' as mixin
+
 .highlight
-	width: 100%
-	height: 100%
-	background: var(--gradient)
-	border-radius: 25px
-	padding: 16px
-	&__title
-		font-size: var(--big-font)
-		color: var(--font-color)
-	&__grid
-		margin-top: var(--medium-margin)
-		display: grid
-		grid-template-columns: repeat(3, 1fr)
-		gap: 20px
+  width: 100%
+  height: 100%
+  background: var(--gradient)
+  border-radius: 25px
+  padding: 16px
+  &__title
+    font-size: var(--big-font)
+    color: var(--font-color)
+  &__grid
+    margin-top: var(--medium-margin)
+    display: grid
+    grid-template-columns: repeat(3, 1fr)
+    gap: 20px
+    @include mixin.adaptive(md)
+      display: flex
+      flex-direction: column
 </style>
