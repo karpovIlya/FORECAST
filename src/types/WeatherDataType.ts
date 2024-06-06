@@ -1,8 +1,3 @@
-interface ICoord {
-  lon: number
-  lat: number
-}
-
 interface IWeather {
   id: number
   main: string
@@ -29,6 +24,11 @@ interface ISys {
   sunrise: number
   sunset: number
   type: number
+}
+
+export interface ICoord {
+  lon: number
+  lat: number
 }
 
 export interface IWind {

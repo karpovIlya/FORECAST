@@ -1,6 +1,6 @@
 import { API_KEY, BASE_URL, ZERO_KELVIN, MS_IN_SECOND } from '@/constants/index'
 import axios, { type AxiosResponse } from 'axios'
-import { type IWeatherResponse, type IWind } from '@/types/WeatherDataType'
+import { type IWeatherResponse, type IWind, type ICoord } from '@/types/WeatherDataType'
 
 interface IWeatherDataState {
   city: string
@@ -9,8 +9,10 @@ interface IWeatherDataState {
   description: string
   pressure: number
   wind: IWind
+  coords: ICoord
   sunrise: Date
   sunset: Date
+  humidity: number
 }
 
 interface IContext {
@@ -29,8 +31,13 @@ export const weatherDataModule = {
       speed: 0,
       deg: 0
     },
+    coords: {
+      lat: 0,
+      lon: 0
+    },
     sunrise: new Date(),
-    sunset: new Date()
+    sunset: new Date(),
+    humidity: 0
   }),
   getters: {
     getCity(state: IWeatherDataState) {
@@ -51,11 +58,17 @@ export const weatherDataModule = {
     getWindInfo(state: IWeatherDataState) {
       return state.wind
     },
+    getCoordsInfo(state: IWeatherDataState) {
+      return state.coords
+    },
     getSunrise(state: IWeatherDataState) {
       return state.sunrise
     },
     getSunset(state: IWeatherDataState) {
       return state.sunset
+    },
+    getHumidity(state: IWeatherDataState) {
+      return state.humidity
     }
   },
   mutations: {
@@ -78,11 +91,17 @@ export const weatherDataModule = {
     setWind(state: IWeatherDataState, payload: IWind) {
       state.wind = payload
     },
+    setCoords(state: IWeatherDataState, payload: ICoord) {
+      state.coords = payload
+    },
     setSunrise(state: IWeatherDataState, payload: Date) {
       state.sunrise = payload
     },
     setSunset(state: IWeatherDataState, payload: Date) {
       state.sunset = payload
+    },
+    setHumidity(state: IWeatherDataState, payload: number) {
+      state.humidity = payload
     }
   },
   actions: {
@@ -104,8 +123,10 @@ export const weatherDataModule = {
           commit('setDescription', data.weather[0].description)
           commit('setPressure', data.main.pressure)
           commit('setWind', data.wind)
+          commit('setCoords', data.coord)
           commit('setSunrise', new Date(data.sys.sunrise * MS_IN_SECOND))
           commit('setSunset', new Date(data.sys.sunset * MS_IN_SECOND))
+          commit('setHumidity', data.main.humidity)
         }
       } catch (_) {
         alert('You entered wrong answer!')
