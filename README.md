@@ -1,18 +1,10 @@
 # FORECAST
 
-This template should help get you started developing with Vue 3 in Vite.
+Our weather application built with Vue.js 3 provides users with up-to-date weather information for cities worldwide. It features a dynamic search bar, real-time weather updates, and responsive design, ensuring a seamless user experience across all devices. The application leverages Vuex for state management and Axios for fetching weather data from the OpenWeatherMap API
 
-## Recommended IDE Setup
+## Stack
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+> vite [documentation](https://vitejs.dev/guide/) typescript [documentation](https://www.typescriptlang.org/docs/) vue [documentation](https://vuejs.org/)
 
 ## Project Setup
 

@@ -129,7 +129,7 @@ export const weatherDataModule = {
           commit('setHumidity', data.main.humidity)
         }
       } catch (_) {
-        alert('You entered wrong answer!')
+        alert('Oooops... Something went wrong!')
       }
     }
   }

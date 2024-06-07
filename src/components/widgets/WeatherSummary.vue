@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, type ComputedRef, watch } from 'vue'
+import { computed, onMounted, ref, type ComputedRef, watch, onUnmounted } from 'vue'
 import InputUi from '@/components/UI/InputUi.vue'
 import TextWithIcon from '@/components/UI/TextWithIconUi.vue'
 import { useStore } from 'vuex'
@@ -45,6 +45,11 @@ const country: ComputedRef<string> = computed(() => store.getters.getCountry)
 const description: ComputedRef<string> = computed(() => store.getters.getDescription)
 
 const weatherImage = ref('')
+const updateInterval = 60000
+
+const updateIntervalId = setInterval(() => {
+  store.dispatch('fetchWeatherData')
+}, updateInterval)
 
 watch(
   description,
@@ -66,6 +71,10 @@ const requestWeatherData = (): void => {
 
 onMounted(() => {
   store.dispatch('fetchWeatherData')
+})
+
+onUnmounted(() => {
+  clearInterval(updateIntervalId)
 })
 </script>
 
